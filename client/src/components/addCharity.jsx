@@ -1,114 +1,46 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { getMovementsLeading, getMovementsFollowing } from '../services/services';
-
+import React from 'react';
+// component receives its setPol... functions from StartMovement; they will update its state
 const AddCharity = ({
-  user,
-  name,
-  description,
-  city,
-  state,
-  imageUrl,
-  setStartMovementClicked,
-  setMovementsLeading,
+  setCharName,
+  setCharUrl,
+  setCharImageUrl,
+  setCharDescription,
 }) => {
-  const [polFirstName, setPolFirstName] = useState('');
-  const [polLastName, setPolLastName] = useState('');
-  const [polPhoneNumber, setPolPhoneNumber] = useState('');
-  const [polEmail, setPolEmail] = useState('');
-  const [polOrg, setPolOrg] = useState('');
-  const [polPosition, setPolPosition] = useState('');
-  const [polImageUrl, setPolImageUrl] = useState('');
-
-  const handlePolSubmit = (event) => {
-    event.preventDefault();
-    const { id } = user;
-    const movementObj = {
-      name,
-      description,
-      location: `${city}, ${state}`,
-      imageUrl,
-      emailCount: 0,
-      textCount: 0,
-      followers: 0,
-      polFirstName,
-      polLastName,
-      polPhoneNumber,
-      polOrg,
-      polPosition,
-      polImageUrl,
-      polEmail,
-    };
-    axios.post('/movement', { movementObj, id })
-      .then((movement) => {
-        document.getElementById('start-movement').reset();
-        document.getElementById('add-charity').reset();
-        setStartMovementClicked(false);
-        getMovementsLeading(user.id)
-          .then(results => {
-            setMovementsLeading(results.data);
-          })
-          .catch(err => console.error(err));
-      })
-      .catch((err) => console.error(err));
-  };
-
   return (
     <div>
-      <form id="add-politician" className="w-full max-w-lg">
+      <form id="add-charity" className="w-full max-w-lg">
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              Charity&apos;s First Name
+              Charity&apos;s Name
             </label>
-            <input onChange={(e) => setPolFirstName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Niccolò" />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              Charity&apos;s Last Name
-            </label>
-            <input onChange={(e) => setPolLastName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Machiavelli" />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
-              Phone number for this Charity
-            </label>
-            <input onChange={(e) => setPolPhoneNumber(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="(555) 123-4567" />
-          </div>
-          <div className="w-full md:w-1/2 px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
-              Email Address for this Charity
-            </label>
-            <input onChange={(e) => setPolEmail(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="yourGovernor@state.gov" />
-          </div>
-          <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
-              Who is this Charity affiliated with?
-            </label>
-            <input onChange={(e) => setPolOrg(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Worker's Family Party" />
+            <input onChange={(e) => setCharName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Make a Wish Foundation" />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              What Position does this Charity hold?
+              Link to the charity&apos;s website
             </label>
-            <input onChange={(e) => setPolPosition(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Mayor of Atlantis" />
+            <input onChange={(e) => setCharUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="www.worldwish.org" />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              Add an Image of this Charity
+              Add an image for this charity
             </label>
-            <input onChange={(e) => setPolImageUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Image URL" />
+            <input onChange={(e) => setCharImageUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Image Url" />
           </div>
         </div>
-        <button onClick={handlePolSubmit} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add Charity and Create Movement!</button>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full px-3">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
+              Add a description of this charity
+            </label>
+            <textarea onChange={(e) => setCharDescription(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Together, we create life-changing wishes for children with critical illnesses." rows="3" />
+          </div>
+        </div>
       </form>
     </div>
   );

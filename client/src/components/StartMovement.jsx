@@ -27,7 +27,6 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [addPolClicked, setAddPolClicked] = useState(false);
   const [addCharClicked, setAddCharClicked] = useState(false);
 
-
   // this master submit function will accept basic, politician, and charity info and create a movement
   const saveMovement = (event) => {
     event.preventDefault();
@@ -116,39 +115,23 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
       <div className="mt-4 mb-4">
         {addPolClicked && (
-          <div className="">
-            <AddPolitician
-              setPolFirstName={setPolFirstName}
-              setPolLastName={setPolLastName}
-              setPolPhoneNumber={setPolPhoneNumber}
-              setPolEmail={setPolEmail}
-              setPolOrg={setPolOrg}
-              setPolPosition={setPolPosition}
-              setPolImageUrl={setPolImageUrl}
-              user={user}
-              name={name}
-              description={desc}
-              city={city}
-              state={state}
-              imageUrl={imageUrl}
-              setStartMovementClicked={setStartMovementClicked}
-              setMovementsLeading={setMovementsLeading}
-            />
-          </div>
+          <AddPolitician
+            setPolFirstName={setPolFirstName}
+            setPolLastName={setPolLastName}
+            setPolPhoneNumber={setPolPhoneNumber}
+            setPolEmail={setPolEmail}
+            setPolOrg={setPolOrg}
+            setPolPosition={setPolPosition}
+            setPolImageUrl={setPolImageUrl}
+          />
         )}
         {addCharClicked && (
-          <div className="">
-            <AddCharity
-              user={user}
-              name={name}
-              description={desc}
-              city={city}
-              state={state}
-              imageUrl={imageUrl}
-              setStartMovementClicked={setStartMovementClicked}
-              setMovementsLeading={setMovementsLeading}
-            />
-          </div>
+          <AddCharity
+            setCharName={setCharName}
+            setCharUrl={setCharUrl}
+            setCharImageUrl={setCharImageUrl}
+            setCharDescription={setCharDescription}
+          />
         )}
         <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
       </div>
