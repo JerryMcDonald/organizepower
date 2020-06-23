@@ -13,10 +13,23 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [city, setCity] = useState('');
   const [state, setState] = useState('AL');
   const [imageUrl, setImageUrl] = useState('');
+  const [charName, setCharName] = useState('');
+  const [charUrl, setCharUrl] = useState('');
+  const [charImageUrl, setCharImageUrl] = useState('');
+  const [charDescription, setCharDescription] = useState('');
+  const [polFirstName, setPolFirstName] = useState('');
+  const [polLastName, setPolLastName] = useState('');
+  const [polPhoneNumber, setPolPhoneNumber] = useState('');
+  const [polEmail, setPolEmail] = useState('');
+  const [polOrg, setPolOrg] = useState('');
+  const [polPosition, setPolPosition] = useState('');
+  const [polImageUrl, setPolImageUrl] = useState('');
   const [addPolClicked, setAddPolClicked] = useState(false);
   const [addCharClicked, setAddCharClicked] = useState(false);
 
-  const handleSubmit = (event) => {
+
+  // this master submit function will accept basic, politician, and charity info and create a movement
+  const saveMovement = (event) => {
     event.preventDefault();
     const { id } = user;
     const movementObj = {
@@ -26,7 +39,18 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       emailCount: 0,
       textCount: 0,
       followers: 0,
+      polFirstName,
+      polLastName,
+      polPhoneNumber,
+      polEmail,
+      polOrg,
+      polPosition,
+      polImageUrl,
       imageUrl,
+      charName,
+      charUrl,
+      charImageUrl,
+      charDescription,
     };
     axios.post('/movement', { movementObj, id })
       .then((movement) => {
@@ -94,8 +118,14 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
         {addPolClicked && (
           <div className="">
             <AddPolitician
+              setPolFirstName={setPolFirstName}
+              setPolLastName={setPolLastName}
+              setPolPhoneNumber={setPolPhoneNumber}
+              setPolEmail={setPolEmail}
+              setPolOrg={setPolOrg}
+              setPolPosition={setPolPosition}
+              setPolImageUrl={setPolImageUrl}
               user={user}
-              handleSubmit={handleSubmit}
               name={name}
               description={desc}
               city={city}
@@ -105,15 +135,11 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
               setMovementsLeading={setMovementsLeading}
             />
           </div>
-        )}
-        {!addPolClicked && !addCharClicked && (
-          <button onClick={handleSubmit} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
         )}
         {addCharClicked && (
           <div className="">
             <AddCharity
               user={user}
-              handleSubmit={handleSubmit}
               name={name}
               description={desc}
               city={city}
@@ -124,6 +150,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             />
           </div>
         )}
+        <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
       </div>
     </div>
   );
