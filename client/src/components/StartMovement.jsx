@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import AddPolitician from './AddPolitician.jsx';
+import AddCharity from './addCharity.jsx';
 import StatesSelect from './StatesSelect.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 // import StatesSelect from './StatesSelect.jsx';
@@ -13,6 +14,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [state, setState] = useState('AL');
   const [imageUrl, setImageUrl] = useState('');
   const [addPolClicked, setAddPolClicked] = useState(false);
+  const [addCharClicked, setAddCharClicked] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -87,6 +89,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
         </div>
       </form>
       <button onClick={() => setAddPolClicked(!addPolClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Politician to Your Movement</button>
+      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
       <div className="mt-4 mb-4">
         {addPolClicked && (
           <div className="">
@@ -103,8 +106,23 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             />
           </div>
         )}
-        {!addPolClicked && (
+        {!addPolClicked && !addCharClicked && (
           <button onClick={handleSubmit} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
+        )}
+        {addCharClicked && (
+          <div className="">
+            <AddCharity
+              user={user}
+              handleSubmit={handleSubmit}
+              name={name}
+              description={desc}
+              city={city}
+              state={state}
+              imageUrl={imageUrl}
+              setStartMovementClicked={setStartMovementClicked}
+              setMovementsLeading={setMovementsLeading}
+            />
+          </div>
         )}
       </div>
     </div>
