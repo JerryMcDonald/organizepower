@@ -9,24 +9,46 @@ const AddCharity = ({
 }) => {
   const [search, setSearch] = useState('');
   const [create, setCreate] = useState(true);
+  const [charities, setCharities] = useState([]);
 
   const findCharities = () => {
+    let tempCharities = [];
     if (search) {
-      axios.get('https://api.data.charitynavigator.org/v2/Organizations', {
+      axios.get('/charity', {
+        // ***** to do: allow advancded searching with more params ****
         params: {
-          app_key: process.env.CHARITY_NAVIGATOR_KEY,
-          app_id: process.env.CHARITY_NAVIGATOR_ID,
-          pageSize: 5,
           search,
         },
-      });
+      })
+        .then((response) => {
+          const { data } = response;
+          const promises = data.map((charity) => {
+            return axios.get('/charity/details', {
+              params: { ein: charity.ein },
+            });
+          });
+          return Promise.all(promises);
+        })
+        .then((response) => {
+          response.forEach((obj) => {
+            const { charityName, currentRating, mission, websiteURL, tagLine } = obj.data;
+            tempCharities.push({
+              charityName,
+              currentRating,
+              mission,
+              websiteURL,
+              tagLine,
+            });
+          });
+          setCharities(tempCharities);
+        });
     }
   };
 
   return (
     <div className="pt-5">
       {/* button asking if you want to create your own; changes create */}
-      <button onClick={() => setCreate(!create)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Search for a charity to link or add your own</button>
+      <button onClick={() => setCreate(!create)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Search for a charity to link / Add your own</button>
       {/* only shows if you are creating your own */}
       {create && (
 
@@ -43,7 +65,7 @@ const AddCharity = ({
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
                 Link to the charity&apos;s website
-            </label>
+              </label>
               <input onChange={(e) => setCharUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="www.worldwish.org" />
             </div>
           </div>
@@ -70,7 +92,7 @@ const AddCharity = ({
         <div flex flex-col>
           <div className="search-box mx-auto my-auto w-full sm:w-full md:w-full lg:w-full xl:w-full">
             <form className="flex flex-row w-full">
-              <span className="py-3 pr-3 sm:w-auto md:w-auto lg:w-2/3 xl:w-2/3">
+              <span className="py-3 pr-3 sm:w-auto md:w-auto lg:w-1/2 xl:w-1/2">
                 <input onChange={(e) => setSearch(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Search for charities by keyword" />
               </span>
               <span className="py-2 px-4">
