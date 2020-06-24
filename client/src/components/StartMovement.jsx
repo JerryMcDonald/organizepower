@@ -114,7 +114,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
         </div>
       </form>
       <button onClick={() => setAddPolClicked(!addPolClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Politician to Your Movement</button>
-      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
+      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
       <div className="mt-4 mb-4">
         {addPolClicked && (
           <AddPolitician

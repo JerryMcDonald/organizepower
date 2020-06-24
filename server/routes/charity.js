@@ -4,12 +4,13 @@ const axios = require('axios');
 const charityRouter = Router();
 
 charityRouter.get('/', (req, res) => {
-  const { search } = req.query;
+  const { search, pageSize } = req.query;
   axios.get('https://api.data.charitynavigator.org/v2/Organizations', {
     params: {
       app_key: process.env.CHARITY_NAVIGATOR_KEY,
       app_id: process.env.CHARITY_NAVIGATOR_ID,
       search,
+      pageSize,
       cfcCharities: true,
     },
   })

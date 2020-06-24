@@ -20,6 +20,7 @@ const AddCharity = ({
         // ***** to do: allow advancded searching with more params ****
         params: {
           search,
+          pageSize: 10,
         },
       })
         .then((response) => {
@@ -118,6 +119,11 @@ const AddCharity = ({
               {charities.map((charity) => (
                 <Charity
                   charity={charity}
+                  setCharName={setCharName}
+                  setCharUrl={setCharUrl}
+                  setCharImageUrl={setCharImageUrl}
+                  setCharDescription={setCharDescription}
+                  setCharTagline={setCharTagline}
                 />
               ))}
             </div>
