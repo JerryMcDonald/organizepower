@@ -113,6 +113,7 @@ const Movement = sequelize.define('movement', {
   charUrl: { type: DataTypes.STRING },
   charImageUrl: { type: DataTypes.STRING },
   charDescription: { type: DataTypes.STRING },
+  charTagline: { type: DataTypes.STRING },
 }, { underscored: true });
 
 // track which movements a user 'joins'
@@ -134,8 +135,8 @@ const Comment = sequelize.define('comment', {
 // { force: true } will drop and recreate the tables,
 // can be handy for dev but also dangerous:
 
-sequelize.sync({ force: true });
-// sequelize.sync(); // will not drop tables every time
+// sequelize.sync({ force: true });
+sequelize.sync(); // will not drop tables every time
 
 // ASSOCIATIONS: these need to be set after all the models have been
 // made and synced with the database. Cannot make an association if

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import SendMessage from './SendMessage.jsx';
 import Comments from './Comments.jsx';
+import Charity from './Charity.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
 
 const Movement = ({
@@ -23,6 +24,11 @@ const Movement = ({
     followers,
     emailCount,
     textCount,
+    charDescription,
+    charImageUrl,
+    charName,
+    charUrl,
+    charTagline,
   } = currentMovement;
 
   const data = [
@@ -159,6 +165,15 @@ const Movement = ({
             <p className="text-gray-600">FOLLOWERS: {followersString}</p>
             <p className="text-gray-600">EMAILS SENT: {emailCountString}</p>
             <p className="text-gray-600">TEXTS SENT: {textCountString}</p>
+            <Charity
+              charity={{
+                charDescription,
+                charImageUrl,
+                charName,
+                charUrl,
+                charTagline,
+              }}
+            />
           </div>
         </div>
       </div>

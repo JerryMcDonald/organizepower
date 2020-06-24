@@ -17,6 +17,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
   const [charUrl, setCharUrl] = useState('');
   const [charImageUrl, setCharImageUrl] = useState('');
   const [charDescription, setCharDescription] = useState('');
+  const [charTagline, setCharTagline] = useState('');
   const [polFirstName, setPolFirstName] = useState('');
   const [polLastName, setPolLastName] = useState('');
   const [polPhoneNumber, setPolPhoneNumber] = useState('');
@@ -50,6 +51,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       charUrl,
       charImageUrl,
       charDescription,
+      charTagline,
     };
     axios.post('/movement', { movementObj, id })
       .then((movement) => {
@@ -131,6 +133,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             setCharUrl={setCharUrl}
             setCharImageUrl={setCharImageUrl}
             setCharDescription={setCharDescription}
+            setCharTagline={setCharTagline}
           />
         )}
         <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>

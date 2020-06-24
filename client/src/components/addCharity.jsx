@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Charity from './Charity.jsx';
 // addCharity receives its setChar... functions from StartMovement; they will update addChar's state
 const AddCharity = ({
   setCharName,
   setCharUrl,
   setCharImageUrl,
   setCharDescription,
+  setCharTagline,
 }) => {
   const [search, setSearch] = useState('');
   const [create, setCreate] = useState(true);
-  const [charities, setCharities] = useState([]);
+  const [charities, setCharities] = useState(false);
 
   const findCharities = () => {
-    let tempCharities = [];
+    const tempCharities = [];
     if (search) {
       axios.get('/charity', {
         // ***** to do: allow advancded searching with more params ****
@@ -33,11 +35,11 @@ const AddCharity = ({
           response.forEach((obj) => {
             const { charityName, currentRating, mission, websiteURL, tagLine } = obj.data;
             tempCharities.push({
-              charityName,
+              charName: charityName,
               currentRating,
-              mission,
-              websiteURL,
-              tagLine,
+              charDescription: mission,
+              charUrl: websiteURL,
+              charTagline: tagLine,
             });
           });
           setCharities(tempCharities);
@@ -48,6 +50,7 @@ const AddCharity = ({
   return (
     <div className="pt-5">
       {/* button asking if you want to create your own; changes create */}
+      {/* ******* to do: change this text on click */}
       <button onClick={() => setCreate(!create)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Search for a charity to link / Add your own</button>
       {/* only shows if you are creating your own */}
       {create && (
@@ -80,6 +83,14 @@ const AddCharity = ({
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
+                Add a tagline
+              </label>
+              <input onChange={(e) => setCharTagline(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Together, we create life-changing wishes for children with critical illnesses." />
+            </div>
+          </div>
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
                 Add a description of this charity
               </label>
               <textarea onChange={(e) => setCharDescription(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Together, we create life-changing wishes for children with critical illnesses." rows="3" />
@@ -102,10 +113,16 @@ const AddCharity = ({
               </span>
             </form>
           </div>
+          {charities && (
+            <div className="flex flex-wrap">
+              {charities.map((charity) => (
+                <Charity
+                  charity={charity}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        
-        // on search, send request to find the charities
-        // then, for each, send request to get details on that specific charity
         // use those results to create divs with pictures and descriptions
         // when clicking on that picture, outline it and set Char properties using that div
       )}
