@@ -1,13 +1,35 @@
-import React from 'react';
-// component receives its setPol... functions from StartMovement; they will update its state
+import React, { useState } from 'react';
+import axios from 'axios';
+// addCharity receives its setChar... functions from StartMovement; they will update addChar's state
 const AddCharity = ({
   setCharName,
   setCharUrl,
   setCharImageUrl,
   setCharDescription,
 }) => {
+  const [search, setSearch] = useState('');
+  const [create, setCreate] = useState(true);
+
+  const findCharities = () => {
+    if (search) {
+      axios.get('https://api.data.charitynavigator.org/v2/Organizations', {
+        params: {
+          app_key: process.env.CHARITY_NAVIGATOR_KEY,
+          app_id: process.env.CHARITY_NAVIGATOR_ID,
+          pageSize: 5,
+          search,
+        },
+      });
+    }
+  };
+
   return (
     <div>
+      {/* button asking if you want to create your own; changes create */}
+      <button onClick={() => setCreate(!create)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Search for a charity to link or add your own</button>
+      {/* only shows if you are creating your own */}
+      {create && (
+
       <form id="add-charity" className="w-full max-w-lg">
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
@@ -42,6 +64,10 @@ const AddCharity = ({
           </div>
         </div>
       </form>
+      )}
+      {!create && (
+        <div> this shows when you are using the api</div>
+      )}
     </div>
   );
 };
