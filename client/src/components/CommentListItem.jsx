@@ -8,30 +8,49 @@ const CommentListItem = ({ comment, key }) => {
   const { username, commentText, createdAt, id_user } = comment;
 
   // a user set state for the profile image
-  const [username, setUsername] = useState('');
+  const [user, setUser] = useState({ imageUrl: '' });
 
-
-  getUserProfileById(id_user)
-  .then(res => {
-    console.log(res);
-  })
-
-
-
-
+  useEffect(() => {
+    getUserProfileById(id_user)
+      .then(res => {
+        console.log(res);
+        setUser(res.data);
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   return (
-    <div className="flex">
-      <td className="px-2 py-4 border-b border-gray-200 flex">
-        <div className="">
-        <img className="h-12 w-12 rounded-full flex" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="" />
+    <div className="flex items-start px-4 py-6">
+      <img className="w-12 h-12 rounded-full object-cover mr-4 shadow" src={user.imageUrl} alt="avatar" />
+      <div className="">
+        <div className="flex items-center justify-between" id={key}>
+          <h2 className="text-lg font-semibold text-gray-900 -mt-1">{username}</h2>
         </div>
-      </td>
-      <td className="px-2 py-4 border-b border-gray-200" id={key}>
-        <p className="text-sm leading-5 text-gray-900">Comment from {username}:</p>
-        <span className="text-gray-400 text-xs mt-1">{moment(createdAt).fromNow()} - {moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}</span>
-        <p className="text-gray-600 leading-none ml-4 mt-2">{commentText}</p>
-      </td>
+        <p className="text-gray-700">{moment(createdAt).fromNow()} - {moment(createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}</p>
+        <p className="mt-3 text-gray-700 text-sm">
+          {commentText}
+        </p>
+        <div className="mt-4 flex items-center">
+          <div className="flex mr-2 text-gray-700 text-sm mr-3">
+            <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <span>12</span>
+          </div>
+          <div className="flex mr-2 text-gray-700 text-sm mr-8">
+            <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+            </svg>
+            <span>8</span>
+          </div>
+          <div className="flex mr-2 text-gray-700 text-sm mr-4">
+            <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span>reply</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
