@@ -12,9 +12,11 @@ const AddCharity = ({
   const [search, setSearch] = useState('');
   const [create, setCreate] = useState(true);
   const [charities, setCharities] = useState(false);
+  const [finding, setFinding] = useState(false);
 
   const findCharities = () => {
     const tempCharities = [];
+    setFinding(true);
     if (search) {
       axios.get('/charity', {
         // ***** to do: allow advancded searching with more params ****
@@ -114,6 +116,9 @@ const AddCharity = ({
               </span>
             </form>
           </div>
+          {finding && !charities && (
+            <p className="py-3 text-lg font-bold italic">Please wait while we find charities</p>
+          )}
           {charities && (
             <div className="flex flex-wrap">
               {charities.map((charity, index) => (
