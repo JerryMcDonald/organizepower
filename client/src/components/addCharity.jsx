@@ -123,6 +123,7 @@ const AddCharity = ({
             <div className="flex flex-wrap">
               {charities.map((charity, index) => (
                 <Charity
+                  page="addCharity"
                   index={index}
                   charity={charity}
                   setCharName={setCharName}

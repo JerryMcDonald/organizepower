@@ -138,6 +138,7 @@ const Movement = ({
       <div className="m-8">
         <div>
           <Charity
+            page="movement"
             charity={{
               charDescription,
               charImageUrl,

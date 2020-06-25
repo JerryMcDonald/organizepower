@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 // child of Movement, shows charity details
 // also a child of addCharity
 
-// these setChar.. functions set the state of addCharity
+// these setChar.. functions set the state of startMovement, this component's grandparent
 const Charity = ({
+  page,
   charity,
   setCharName,
   setCharUrl,
@@ -35,20 +36,28 @@ const Charity = ({
     element.classList.toggle('border-4');
   };
 
+  // if this component renders from the addCharity page, we don't want it to have hover attributes
+  useEffect(() => {
+    if (page !== 'addCharity') {
+      const charityChild = document.getElementById('charityChild');
+      charityChild.classList.remove('hover:bg-gray-100');
+      charityChild.classList.remove('hover:border-black');
+    }
+  });
 
   return (
-    <div id={uniqueId} onClick={() => { toggleBorder(); setCharState(); }} className="charity max-w-sm h-full rounded overflow-hidden shadow-lg m-8 float-left border-green-900">
-      <div className="border-r border-b border-l border-gray-400 hover:border-black hover:bg-teal-100 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+    <div id={uniqueId} onClick={() => { toggleBorder(); setCharState(); }} className="charity max-w-sm h-full rounded overflow-hidden shadow-lg m-8 float-left border-mist">
+      <div id="charityChild" className="border-r border-b border-l border-gray-400 hover:border-black hover:bg-gray-100 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         <div className="mb-3">
           <span className="text-gray-900 font-bold text-xl mb-2 hover:text-gray-500 mr-4">
             <img className="w-full" src={charImageUrl} alt="" />
-            <p className="text-black text-lg my-2 mb-3">
+            <p className="text-center text-black text-xl font-bold my-2 mb-3">
               {charName}
             </p>
             {/* <p className="text-gray-700 text-base my-2">
               {currentRating}
             </p> */}
-            <p className="text-gray-700 text-base my-2">
+            <p className="text-gray-700 text-lg my-2 text-center">
               {charTagline}
             </p>
             <p className="text-gray-700 text-sm my-2">
