@@ -15,7 +15,7 @@ const Charity = ({
   const { charDescription, charImageUrl, charName, charUrl, charTagline, currentRating } = charity;
   // give each charity a unique id based off its index
   const uniqueId = `charity${index}`;
-  // const [border, setBorder] = useState('border-r border-b border-l border-gray-400');
+
   // uses this charity's info to set the state of addCharity, so it can create the movement
   const setCharState = () => {
     setCharName(charName);
@@ -25,15 +25,19 @@ const Charity = ({
     setCharTagline(charTagline);
   };
 
-  // toggles a thick border around a specific charity
+  // removes the border from every other charity, then turns on the border of the selected charity
   const toggleBorder = () => {
     const element = document.getElementById(uniqueId);
-    element.classList.toggle("border-4");
+    const charities = document.querySelectorAll('.charity');
+    charities.forEach((c) => {
+      c.classList.remove('border-4');
+    });
+    element.classList.toggle('border-4');
   };
 
 
   return (
-    <div id={uniqueId} onClick={() => { toggleBorder(); setCharState(); }} className="max-w-sm h-full rounded overflow-hidden shadow-lg m-8 float-left border-green-900">
+    <div id={uniqueId} onClick={() => { toggleBorder(); setCharState(); }} className="charity max-w-sm h-full rounded overflow-hidden shadow-lg m-8 float-left border-green-900">
       <div className="border-r border-b border-l border-gray-400 hover:border-black hover:bg-teal-100 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         <div className="mb-3">
           <span className="text-gray-900 font-bold text-xl mb-2 hover:text-gray-500 mr-4">
