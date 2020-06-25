@@ -112,8 +112,8 @@ const Movement = sequelize.define('movement', {
   charName: { type: DataTypes.STRING },
   charUrl: { type: DataTypes.STRING },
   charImageUrl: { type: DataTypes.STRING },
-  charDescription: { type: DataTypes.STRING },
-  charTagline: { type: DataTypes.STRING },
+  charDescription: { type: DataTypes.TEXT },
+  charTagline: { type: DataTypes.STRING(100) },
 }, { underscored: true });
 
 // track which movements a user 'joins'

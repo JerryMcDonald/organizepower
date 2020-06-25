@@ -137,6 +137,15 @@ const Movement = ({
       </div>
       <div className="m-8">
         <div>
+          <Charity
+            charity={{
+              charDescription,
+              charImageUrl,
+              charName,
+              charUrl,
+              charTagline,
+            }}
+          />
           {/* conditionally render follow button if user is logged in */}
           {user && (
             <div>
@@ -165,15 +174,6 @@ const Movement = ({
             <p className="text-gray-600">FOLLOWERS: {followersString}</p>
             <p className="text-gray-600">EMAILS SENT: {emailCountString}</p>
             <p className="text-gray-600">TEXTS SENT: {textCountString}</p>
-            <Charity
-              charity={{
-                charDescription,
-                charImageUrl,
-                charName,
-                charUrl,
-                charTagline,
-              }}
-            />
           </div>
         </div>
       </div>
