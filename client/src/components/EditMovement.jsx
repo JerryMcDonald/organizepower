@@ -1,34 +1,36 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import axios from 'axios';
 import AddPolitician from './AddPolitician.jsx';
 import AddCharity from './addCharity.jsx';
 import StatesSelect from './StatesSelect.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
-// import StatesSelect from './StatesSelect.jsx';
-
-const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) => {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [city, setCity] = useState('');
+// child of Movement
+const EditMovement = ({
+  user,
+  setStartMovementClicked,
+  setMovementsLeading,
+  currentMovement,
+}) => {
+  const [name, setName] = useState(currentMovement.name);
+  const [desc, setDesc] = useState(currentMovement.description);
+  const [city, setCity] = useState(currentMovement.location.split(',')[0]);
   const [state, setState] = useState('AL');
-  const [imageUrl, setImageUrl] = useState('');
-  const [charName, setCharName] = useState('');
-  const [charUrl, setCharUrl] = useState('');
-  const [charImageUrl, setCharImageUrl] = useState('');
-  const [charDescription, setCharDescription] = useState('');
-  const [charTagline, setCharTagline] = useState('');
-  const [polFirstName, setPolFirstName] = useState('');
-  const [polLastName, setPolLastName] = useState('');
-  const [polPhoneNumber, setPolPhoneNumber] = useState('');
-  const [polEmail, setPolEmail] = useState('');
-  // const [polOrg, setPolOrg] = useState('');
-  const [polPosition, setPolPosition] = useState('');
-  const [polImageUrl, setPolImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState(currentMovement.imageUrl);
+  const [charName, setCharName] = useState(currentMovement.charName);
+  const [charUrl, setCharUrl] = useState(currentMovement.charUrl);
+  const [charImageUrl, setCharImageUrl] = useState(currentMovement.charImageUrl);
+  const [charDescription, setCharDescription] = useState(currentMovement.charDescription);
+  const [charTagline, setCharTagline] = useState(currentMovement.charTagline);
+  const [polFirstName, setPolFirstName] = useState(currentMovement.polFirstName);
+  const [polLastName, setPolLastName] = useState(currentMovement.polLastName);
+  const [polPhoneNumber, setPolPhoneNumber] = useState(currentMovement.polPhoneNumber);
+  const [polEmail, setPolEmail] = useState(currentMovement.polEmail);
+  const [polOrg, setPolOrg] = useState('');                       // **********************check this out
+  const [polPosition, setPolPosition] = useState(currentMovement.polPosition);
+  const [polImageUrl, setPolImageUrl] = useState(currentMovement.polImageUrl);
   const [addPolClicked, setAddPolClicked] = useState(false);
   const [addCharClicked, setAddCharClicked] = useState(false);
-
-  // this master submit function will accept basic, politician, and charity info and create a movement
+  
   const saveMovement = (event) => {
     event.preventDefault();
     const { id } = user;
@@ -43,7 +45,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       polLastName,
       polPhoneNumber,
       polEmail,
-      // polOrg,
+      polOrg,
       polPosition,
       polImageUrl,
       imageUrl,
@@ -54,7 +56,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       charTagline,
     };
     axios.post('/movement', { movementObj, id })
-      .then((movement) => {
+      .then(() => {
         document.getElementById('start-movement').reset();
         setStartMovementClicked(false);
         getMovementsLeading(user.id)
@@ -65,16 +67,15 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
       })
       .catch((err) => console.error(err));
   };
-
   return (
     <div>
       <form id="start-movement" className="w-full max-w-lg">
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              Name Your Movement
+              Movement name
             </label>
-            <input onChange={(e) => setName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="An Important Cause" />
+            <input onChange={(e) => setName(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" value={name} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -82,15 +83,15 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
               Description
             </label>
-            <textarea onChange={(e) => setDesc(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Goals? Demands?" />
+            <textarea onChange={(e) => setDesc(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" value={desc} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-              Add an image for this Movement
+              Image
             </label>
-            <input onChange={(e) => setImageUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" placeholder="Image URL" />
+            <input onChange={(e) => setImageUrl(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text" value={imageUrl} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -98,7 +99,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
               City
             </label>
-            <input onChange={(e) => setCity(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Montgomery" />
+            <input onChange={(e) => setCity(e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" value={city} />
           </div>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-state">
@@ -113,8 +114,8 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
           </div>
         </div>
       </form>
-      <button onClick={() => setAddPolClicked(!addPolClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Add a Politician to Your Movement</button>
-      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow mr-4">Add a Charity to Your Movement</button>
+      <button onClick={() => setAddPolClicked(!addPolClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Change politician</button>
+      <button onClick={() => setAddCharClicked(!addCharClicked)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow mr-4">Change charity</button>
       <div className="mt-4 mb-4">
         {addPolClicked && (
           <AddPolitician
@@ -122,7 +123,7 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             setPolLastName={setPolLastName}
             setPolPhoneNumber={setPolPhoneNumber}
             setPolEmail={setPolEmail}
-            // setPolOrg={setPolOrg}
+            setPolOrg={setPolOrg}
             setPolPosition={setPolPosition}
             setPolImageUrl={setPolImageUrl}
           />
@@ -136,9 +137,9 @@ const StartMovement = ({ user, setStartMovementClicked, setMovementsLeading }) =
             setCharTagline={setCharTagline}
           />
         )}
-        <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Create!</button>
+        <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Update</button>
       </div>
     </div>
   );
 };
-export default StartMovement;
+export default EditMovement;
