@@ -8,9 +8,7 @@ const CommentList = ({ comments }) => {
       {/* if there are comments map through them and pass down each comment,
       with he latest comment on top, to commentListItem */}
       {comments.length && comments.reverse().map(comment => (
-        <div className="ml-4 mt-4 mb-4" key={comment.id}>
           <CommentListItem comment={comment} />
-        </div>
       ))}
     </div>
   );
