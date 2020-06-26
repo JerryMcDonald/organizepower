@@ -142,6 +142,7 @@ const Movement = ({
               <div>
                 {edit && (
                   <EditMovement
+                    setEdit={setEdit}
                     currentMovement={currentMovement}
                   />
                 )}

@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+// import { Redirect } from 'react-router-dom';
 import AddPolitician from './AddPolitician.jsx';
 import AddCharity from './addCharity.jsx';
 import StatesSelect from './StatesSelect.jsx';
 import { getMovementsLeading, getMovementsFollowing } from '../services/services';
+
 // child of Movement
 const EditMovement = ({
+  setEdit, // sets Edit state of Movement
   user,
-  setStartMovementClicked,
   setMovementsLeading,
   currentMovement,
 }) => {
+  const oldCity = currentMovement.location.split(',')[0];
+  const oldState = currentMovement.location.split(',')[1].substring(1);
+
   const [name, setName] = useState(currentMovement.name);
   const [desc, setDesc] = useState(currentMovement.description);
-  const [city, setCity] = useState(currentMovement.location.split(',')[0]);
-  const [state, setState] = useState('AL');
+  const [city, setCity] = useState(oldCity);
+  const [state, setState] = useState(oldState);
   const [imageUrl, setImageUrl] = useState(currentMovement.imageUrl);
   const [charName, setCharName] = useState(currentMovement.charName);
   const [charUrl, setCharUrl] = useState(currentMovement.charUrl);
@@ -30,17 +35,18 @@ const EditMovement = ({
   const [polImageUrl, setPolImageUrl] = useState(currentMovement.polImageUrl);
   const [addPolClicked, setAddPolClicked] = useState(false);
   const [addCharClicked, setAddCharClicked] = useState(false);
-  
-  const saveMovement = (event) => {
+
+  const editMovement = (event) => {
     event.preventDefault();
-    const { id } = user;
     const movementObj = {
+      id: currentMovement.id,
       name,
       description: desc,
       location: `${city}, ${state}`,
-      emailCount: 0,
+      emailCount: currentMovement.emailCount,
+      /// currentMovement does not currently have this. we could make it have it
       textCount: 0,
-      followers: 0,
+      followers: currentMovement.followers,
       polFirstName,
       polLastName,
       polPhoneNumber,
@@ -55,10 +61,10 @@ const EditMovement = ({
       charDescription,
       charTagline,
     };
-    axios.post('/movement', { movementObj, id })
+    axios.put('/movement', { movementObj })
       .then(() => {
-        document.getElementById('start-movement').reset();
-        setStartMovementClicked(false);
+        // this needs to re-render the parent or reload the page or something
+        setEdit(false);
         getMovementsLeading(user.id)
           .then(results => {
             setMovementsLeading(results.data);
@@ -67,6 +73,7 @@ const EditMovement = ({
       })
       .catch((err) => console.error(err));
   };
+
   return (
     <div>
       <form id="start-movement" className="w-full max-w-lg">
@@ -137,7 +144,7 @@ const EditMovement = ({
             setCharTagline={setCharTagline}
           />
         )}
-        <button onClick={saveMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Update</button>
+        <button onClick={editMovement} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Update</button>
       </div>
     </div>
   );
