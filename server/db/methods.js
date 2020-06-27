@@ -245,6 +245,15 @@ const addPolitician = async(politicianObj) => {
   }
 };
 
+const updateEmojiData = async(emojiString, id) => {
+  try {
+    await Comment.update({ emojiData: emojiString },
+      { where: { id } });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
 
   addMovement,
@@ -266,4 +275,5 @@ module.exports = {
   addFollower,
   addComment,
   getComments,
+  updateEmojiData,
 };
