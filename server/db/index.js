@@ -123,6 +123,7 @@ const UserMovement = sequelize.define('userMovement', {
 const Comment = sequelize.define('comment', {
   commentText: { type: DataTypes.STRING, allowNull: false },
   username: { type: DataTypes.STRING, allowNull: false },
+  emojiData: { type: DataTypes.STRING, defaultValue: '[]' },
 }, { underscored: true });
 
 // sync sequelize to create tables in db before adding associations
