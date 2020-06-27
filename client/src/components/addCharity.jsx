@@ -13,6 +13,7 @@ const AddCharity = ({
   const [create, setCreate] = useState(true);
   const [charities, setCharities] = useState(false);
   const [finding, setFinding] = useState(false);
+  const [searchButtonText, setSearchButtonText] = useState('Search for a charity');
 
   const findCharities = () => {
     const tempCharities = [];
@@ -50,11 +51,20 @@ const AddCharity = ({
     }
   };
 
+  const changeSearchButtonText = () => {
+    if (!create) {
+      setSearchButtonText('Search for a charity');
+    } 
+    if (create) {
+      setSearchButtonText('Add a custom charity');
+    }
+  };
+
   return (
     <div className="pt-5">
       {/* button asking if you want to create your own; changes create */}
       {/* ******* to do: change this text on click */}
-      <button onClick={() => setCreate(!create)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">Search for a charity to link / Add your own</button>
+      <button onClick={() => { setCreate(!create); changeSearchButtonText(); }} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">{searchButtonText}</button>
       {/* only shows if you are creating your own */}
       {create && (
 
