@@ -3,7 +3,22 @@ import React, { useState, useEffect } from 'react';
 import CommentReplyListItem from './CommentReplyListItem.jsx';
 // sub component of Comments.jsx
 
-const CommentReplyList = ({ comments, toggleReply }) => {
+const CommentReplyList = ({ comments, toggleReply, addComment }) => {
+
+  const [seen, setSeen] = useState(false);
+  const [text, setText] = useState('');
+
+  const toggleReplyBox = () => {
+    setSeen(!seen);
+    console.log('hello');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addComment(text);
+    // update the reply list data
+  };
+
   return (
     <Draggable>
       <div className=" fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -22,13 +37,24 @@ const CommentReplyList = ({ comments, toggleReply }) => {
             <div className="mt-10">
               <p className="font-bold text-gray-800 text-xl ml-4">Replys</p>
               {/* if there are comments map through them and pass down each comment */}
-              {comments.length && comments.reverse().map(comment => (
+              {comments.length && comments.map(comment => (
                 <CommentReplyListItem comment={comment} />
               ))}
             </div>
             <div className="flex justify-end pt-2">
+              <button className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" onClick={() => toggleReplyBox()}>Reply</button>
               <button className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" onClick={() => toggleReply()}>Close</button>
             </div>
+            {seen ? <form className="commentForm" onSubmit={handleSubmit}>
+              <textarea
+                className="shadow appearance-none border border-gray-200 rounded w-full h-20 py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline m-2"
+                value={text}
+                type="text"
+                placeholder="Say something..."
+                onChange={e => setText(e.target.value)}
+              />
+              <input className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2 float-right" type="submit" value="Submit" />
+            </form> : null}
           </div>
         </div>
       </div>
