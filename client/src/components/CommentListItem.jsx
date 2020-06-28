@@ -9,7 +9,7 @@ import Emojis from './Emojis.jsx';
 // sub component of commentListItem where we recieve a comment
 const CommentListItem = ({ comment, key, comments, currentUser }) => {
   // destructure the username and comment out of props
-  const { username, commentText, createdAt, id_user, id, emojiData } = comment;
+  const { username, commentText, createdAt, id_user, id, emojiData, replyData } = comment;
 
   // a user set state for the profile image
   const [user, setUser] = useState({ imageUrl: '' });
@@ -17,51 +17,37 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
   const [reply, setReply] = useState(false);
   const [emojiArray, setEmojiArray] = useState(JSON.parse(emojiData));
   // example comment data
-  const [replyData, setReplyData] = useState([
-    {
-      id: 1,
-      commentText: 'This is the first example text I am trying to use for the reply to comments',
-      username: 'moMoney',
-      emojiData: '[]',
-      createdAt: '2020-06-28T15:29:08.000Z',
-      id_user: 1,
-    },
-    {
-      id: 2,
-      commentText: 'This is the second example text I am trying to use for the reply to comments yahhhhhhh',
-      username: 'moMoney',
-      emojiData: '[]',
-      createdAt: '2020-06-28T15:29:08.000Z',
-      id_user: 1,
-    },
-    {
-      id: 3,
-      commentText: 'This is the third example text I am trying to use for the reply to comments woooooohooooooo',
-      username: 'moMoney',
-      emojiData: '[]',
-      createdAt: '2020-06-28T15:29:08.000Z',
-      id_user: 1,
-    },
-  ]);
+  const [replyArray, setReplyArray] = useState(JSON.parse(replyData));
+
 
  // add the replied comment to the reply data
   const addCommentToReplyData = (text) => {
     console.log(text, 'in CommentListItem');
     // copy the current replyData
-    const newArr = [...replyData];
+    const newArr = [...replyArray];
     // construct the new comment
     const newComment = {
       id: newArr.length,
       commentText: text,
       username: currentUser.username,
-      emojiData: '[]',
+      emojiData: [],
       createdAt: moment(),
       id_user: currentUser.id,
     };
     // add the new comment to the newArr
     newArr.push(newComment);
     // replace the replyData
-    setReplyData(newArr);
+    setReplyArray(newArr);
+    // I need to update it in the storage yeah!
+  };
+
+  const updateEmojiDataOnReplyComment = (emojiArr, id) => {
+      // copy the current replyData
+      const newArr = [...replyArray];
+      // modify the emojiData on the selected comment
+      newArr[id].emojiData = emojiArr;
+      // replace replyData with the modified newArr
+      setReplyArray(newArr);
   }
 
 
@@ -138,7 +124,7 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
             <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleEmoji}>+</button>
             {seen ? <Emojis toggleEmoji={toggleEmoji} addToEmojiArray={addToEmojiArray} /> : null}
             <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleReply}>+</button>
-            {reply ? <CommentReplyList comments={replyData} toggleReply={toggleReply} addComment={addCommentToReplyData} /> : null}
+            {reply ? <CommentReplyList comments={replyArray} toggleReply={toggleReply} addComment={addCommentToReplyData} updateEmojiData={updateEmojiDataOnReplyComment} /> : null}
           </div>
         </div>
       </div>
@@ -147,3 +133,30 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
 };
 
 export default CommentListItem;
+
+
+// [{
+//   id: 1,
+//   commentText: 'This is the first example text I am trying to use for the reply to comments',
+//   username: 'moMoney',
+//   emojiData: '[]',
+//   createdAt: '2020-06-28T15:29:08.000Z',
+//   id_user: 1,
+// },
+// {
+//   id: 2,
+//   commentText: 'This is the second example text I am trying to use for the reply to comments yahhhhhhh',
+//   username: 'moMoney',
+//   emojiData: '[]',
+//   createdAt: '2020-06-28T15:29:08.000Z',
+//   id_user: 1,
+// },
+// {
+//   id: 3,
+//   commentText: 'This is the third example text I am trying to use for the reply to comments woooooohooooooo',
+//   username: 'moMoney',
+//   emojiData: '[]',
+//   createdAt: '2020-06-28T15:29:08.000Z',
+//   id_user: 1,
+// },
+// ]);
