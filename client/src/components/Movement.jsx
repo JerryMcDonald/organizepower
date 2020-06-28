@@ -154,16 +154,18 @@ const Movement = ({
       </div>
       <div className="m-8">
         <div>
-          <Charity
-            page="movement"
-            charity={{
-              charDescription,
-              charImageUrl,
-              charName,
-              charUrl,
-              charTagline,
-            }}
-          />
+          {charDescription && charName && (
+            <Charity
+              page="movement"
+              charity={{
+                charDescription,
+                charImageUrl,
+                charName,
+                charUrl,
+                charTagline,
+              }}
+            />
+          )}
           {/* conditionally render follow button if user is logged in */}
           {user && (
             <div>
