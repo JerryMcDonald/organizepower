@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Emoji } from 'emoji-mart';
 import axios from 'axios';
+import CommentReplyList from './commentReplyList.jsx';
 import { getUserProfileById } from '../services/services';
 import Emojis from './Emojis.jsx';
 
 // sub component of commentListItem where we recieve a comment
-const CommentListItem = ({ comment, key }) => {
+const CommentListItem = ({ comment, key, comments }) => {
   // destructure the username and comment out of props
   const { username, commentText, createdAt, id_user, id, emojiData } = comment;
 
   // a user set state for the profile image
   const [user, setUser] = useState({ imageUrl: '' });
   const [seen, setSeen] = useState(false);
+  const [reply, setReply] = useState(false);
   const [emojiArray, setEmojiArray] = useState(JSON.parse(emojiData));
 
   useEffect(() => {
@@ -48,6 +50,10 @@ const CommentListItem = ({ comment, key }) => {
     console.log('hello');
   };
 
+  const toggleReply = () => {
+    setReply(!reply);
+  };
+
   const addToEmojiArray = (emojiObject) => {
     console.log(emojiObject);
     // make a new array with the added emoji
@@ -59,7 +65,6 @@ const CommentListItem = ({ comment, key }) => {
   };
 
   const addToEmojiCount = (index) => {
-    console.log(index);
     // copy the current array of objects
     const newArr = [...emojiArray];
     // update the count
@@ -91,8 +96,10 @@ const CommentListItem = ({ comment, key }) => {
             </div>
           ))}
           <div className="flex mr-2 text-gray-700 text-sm mr-4">
-            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" onClick={toggleEmoji}>+</button>
+            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleEmoji}>+</button>
             {seen ? <Emojis toggleEmoji={toggleEmoji} addToEmojiArray={addToEmojiArray} /> : null}
+            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleReply}>+</button>
+            {reply ? <CommentReplyList comments={comments} toggleReply={toggleReply} /> : null}
           </div>
         </div>
       </div>
