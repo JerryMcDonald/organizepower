@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import { Redirect } from 'react-router-dom';
 import AddPolitician from './AddPolitician.jsx';
 import AddCharity from './addCharity.jsx';
 import StatesSelect from './StatesSelect.jsx';
@@ -63,13 +62,9 @@ const EditMovement = ({
     };
     axios.put('/movement', { movementObj })
       .then(() => {
-        // this needs to re-render the parent or reload the page or something
         setEdit(false);
-        getMovementsLeading(user.id)
-          .then(results => {
-            setMovementsLeading(results.data);
-          })
-          .catch(err => console.error(err));
+        // if we enable persistent login, we should reload instead of changing setEdit
+        // window.location.reload(false);
       })
       .catch((err) => console.error(err));
   };

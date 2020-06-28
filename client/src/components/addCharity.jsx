@@ -63,11 +63,9 @@ const AddCharity = ({
   return (
     <div className="pt-5">
       {/* button asking if you want to create your own; changes create */}
-      {/* ******* to do: change this text on click */}
       <button onClick={() => { setCreate(!create); changeSearchButtonText(); }} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-4">{searchButtonText}</button>
       {/* only shows if you are creating your own */}
       {create && (
-
         <form id="add-charity" className="w-full max-w-lg">
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3 pt-3">
@@ -146,8 +144,6 @@ const AddCharity = ({
             </div>
           )}
         </div>
-        // use those results to create divs with pictures and descriptions
-        // when clicking on that picture, outline it and set Char properties using that div
       )}
     </div>
   );
