@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { addComment, getComments, updateEmojiData } = require('../db/methods');
+const { addComment, getComments, updateEmojiData, updateReplyData } = require('../db/methods');
 
 const commentRouter = Router();
 
@@ -29,10 +29,14 @@ commentRouter.post('/', (req, res) => {
     });
 });
 
-commentRouter.post('/update', (req, res) => {
+commentRouter.post('/update/emoji', (req, res) => {
   const { emojiString, id } = req.body;
-  console.log(id);
   updateEmojiData(emojiString, id);
+});
+
+commentRouter.post('/update/reply', (req, res) => {
+  const { replyString, id } = req.body;
+  updateReplyData(replyString, id);
 });
 
 module.exports = {
