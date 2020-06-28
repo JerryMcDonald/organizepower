@@ -1,5 +1,5 @@
 import Draggable from 'react-draggable';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CommentReplyListItem from './CommentReplyListItem.jsx';
 // sub component of Comments.jsx
 
@@ -38,7 +38,9 @@ const CommentReplyList = ({ comments, toggleReply, addComment, updateEmojiData }
               <p className="font-bold text-gray-800 text-xl ml-4">Replys</p>
               {/* if there are comments map through them and pass down each comment */}
               {comments.length > 0 && comments.map(comment => (
-                <CommentReplyListItem comment={comment} updateEmojiData={updateEmojiData} />
+                <div key={comment.id}>
+                  <CommentReplyListItem comment={comment} updateEmojiData={updateEmojiData} />
+                </div>
               ))}
             </div>
             <div className="flex justify-end pt-2">
