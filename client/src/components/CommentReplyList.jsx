@@ -10,7 +10,6 @@ const CommentReplyList = ({ comments, toggleReply, addComment, updateEmojiData }
 
   const toggleReplyBox = () => {
     setSeen(!seen);
-    console.log('hello');
   };
 
   const handleSubmit = (e) => {

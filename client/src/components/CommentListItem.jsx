@@ -34,7 +34,6 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
 
   // add the replied comment to the reply data
   const addCommentToReplyData = (text) => {
-    console.log(text, 'in CommentListItem');
     // copy the current replyData
     const newArr = [...replyArray];
     // construct the new comment
@@ -67,7 +66,6 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
   useEffect(() => {
     getUserProfileById(id_user)
       .then(res => {
-        console.log(res);
         setUser(res.data);
       })
       .catch(err => console.error(err));
@@ -75,7 +73,6 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
 
   const toggleEmoji = () => {
     setSeen(!seen);
-    console.log('hello');
   };
 
   const toggleReply = () => {
@@ -83,11 +80,9 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
   };
 
   const addToEmojiArray = (emojiObject) => {
-    console.log(emojiObject);
     // make a new array with the added emoji
     const newArr = [...emojiArray];
     newArr.push({ id: emojiObject.id, skin: emojiObject.skin, count: 1 });
-    console.log(newArr);
     setEmojiArray(newArr);
     updateCommentEmoji();
   };
