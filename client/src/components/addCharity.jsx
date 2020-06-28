@@ -103,7 +103,7 @@ const AddCharity = ({
       )}
       {!create && (
         // have a searchbar that sets search state
-        <div flex flex-col>
+        <div className="flex flex-col">
           <div className="search-box mx-auto my-auto w-full sm:w-full md:w-full lg:w-full xl:w-full">
             <form className="flex flex-row w-full">
               <span className="py-3 pr-3 sm:w-auto md:w-auto lg:w-1/2 xl:w-1/2">
@@ -122,6 +122,7 @@ const AddCharity = ({
           {charities && (
             <div className="flex flex-wrap">
               {charities.map((charity, index) => (
+                <div key={index}>
                 <Charity
                   page="addCharity"
                   index={index}
@@ -132,6 +133,7 @@ const AddCharity = ({
                   setCharDescription={setCharDescription}
                   setCharTagline={setCharTagline}
                 />
+                </div>
               ))}
             </div>
           )}
