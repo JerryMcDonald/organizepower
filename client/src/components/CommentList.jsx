@@ -7,8 +7,10 @@ const CommentList = ({ comments, user }) => {
       <p className="font-bold text-gray-800 text-xl ml-4">Comments</p>
       {/* if there are comments map through them and pass down each comment,
       with he latest comment on top, to commentListItem */}
-      {comments.length && comments.map(comment => (
-          <CommentListItem comment={comment} comments={comments} currentUser={user} />
+      {comments.length && comments.map((comment, index) => (
+        <div key={index}>
+          <CommentListItem comment={comment} comments={comments} currentUser={user} id={index} />
+      </div>
       ))}
     </div>
   );
