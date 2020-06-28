@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Emoji } from 'emoji-mart';
 import axios from 'axios';
-import CommentReplyList from './commentReplyList.jsx';
+import CommentReplyList from './CommentReplyList.jsx';
 import { getUserProfileById } from '../services/services';
 import Emojis from './Emojis.jsx';
 
 // sub component of commentListItem where we recieve a comment
-const CommentListItem = ({ comment, key, comments }) => {
+const CommentListItem = ({ comment, key, comments, currentUser }) => {
   // destructure the username and comment out of props
   const { username, commentText, createdAt, id_user, id, emojiData } = comment;
 
@@ -16,6 +16,54 @@ const CommentListItem = ({ comment, key, comments }) => {
   const [seen, setSeen] = useState(false);
   const [reply, setReply] = useState(false);
   const [emojiArray, setEmojiArray] = useState(JSON.parse(emojiData));
+  // example comment data
+  const [replyData, setReplyData] = useState([
+    {
+      id: 1,
+      commentText: 'This is the first example text I am trying to use for the reply to comments',
+      username: 'moMoney',
+      emojiData: '[]',
+      createdAt: '2020-06-28T15:29:08.000Z',
+      id_user: 1,
+    },
+    {
+      id: 2,
+      commentText: 'This is the second example text I am trying to use for the reply to comments yahhhhhhh',
+      username: 'moMoney',
+      emojiData: '[]',
+      createdAt: '2020-06-28T15:29:08.000Z',
+      id_user: 1,
+    },
+    {
+      id: 3,
+      commentText: 'This is the third example text I am trying to use for the reply to comments woooooohooooooo',
+      username: 'moMoney',
+      emojiData: '[]',
+      createdAt: '2020-06-28T15:29:08.000Z',
+      id_user: 1,
+    },
+  ]);
+
+ // add the replied comment to the reply data
+  const addCommentToReplyData = (text) => {
+    console.log(text, 'in CommentListItem');
+    // copy the current replyData
+    const newArr = [...replyData];
+    // construct the new comment
+    const newComment = {
+      id: newArr.length,
+      commentText: text,
+      username: currentUser.username,
+      emojiData: '[]',
+      createdAt: moment(),
+      id_user: currentUser.id,
+    };
+    // add the new comment to the newArr
+    newArr.push(newComment);
+    // replace the replyData
+    setReplyData(newArr);
+  }
+
 
   useEffect(() => {
     getUserProfileById(id_user)
@@ -33,18 +81,9 @@ const CommentListItem = ({ comment, key, comments }) => {
     axios.post('/comment/update', { emojiString, id });
   };
 
-  // const login = (username, password) => {
-  //   return axios.post('/login', { username, password });
-  // };
-  // const getMovementById = (movementId) => {
-  //   axios.get(`/movement/:${movementId}`)
-  //     .then(res => {
-  //       setCurrentMovement(res.data);
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //     });
-  // };
+
+
+
   const toggleEmoji = () => {
     setSeen(!seen);
     console.log('hello');
@@ -77,9 +116,9 @@ const CommentListItem = ({ comment, key, comments }) => {
     <div className="flex items-start px-4 py-6 bg-white shadow-lg">
       <img className="w-12 h-12 rounded-full object-cover mr-4 shadow" src={user.imageUrl} alt="avatar" />
       <div className="">
-        <div className="flex items-center justify-between" id={key}>
+        <div className="flex items-center" id={key}>
           <h2 className="text-lg font-semibold text-gray-900 -mt-1">{username}</h2>
-          <small className="text-sm text-gray-700 object-left">{moment(createdAt).fromNow()}</small>
+          <small className="text-sm text-gray-700 object-left">&nbsp;&nbsp;&nbsp;{moment(createdAt).fromNow()}</small>
         </div>
         <p className="mt-3 text-gray-700 text-sm">
           {commentText}
@@ -99,7 +138,7 @@ const CommentListItem = ({ comment, key, comments }) => {
             <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleEmoji}>+</button>
             {seen ? <Emojis toggleEmoji={toggleEmoji} addToEmojiArray={addToEmojiArray} /> : null}
             <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleReply}>+</button>
-            {reply ? <CommentReplyList comments={comments} toggleReply={toggleReply} /> : null}
+            {reply ? <CommentReplyList comments={replyData} toggleReply={toggleReply} addComment={addCommentToReplyData} /> : null}
           </div>
         </div>
       </div>
