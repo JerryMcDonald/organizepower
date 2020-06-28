@@ -254,6 +254,15 @@ const updateEmojiData = async(emojiString, id) => {
   }
 };
 
+const updateReplyData = async(replyString, id) => {
+  try {
+    await Comment.update({ replyData: replyString },
+      { where: { id } });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
 
   addMovement,
@@ -276,4 +285,5 @@ module.exports = {
   addComment,
   getComments,
   updateEmojiData,
+  updateReplyData,
 };
