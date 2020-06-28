@@ -19,8 +19,20 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
   // example comment data
   const [replyArray, setReplyArray] = useState(JSON.parse(replyData));
 
+  // make a function that will save the current state of the comment into the database
+  const updateCommentEmoji = () => {
+    // stingify the emojiArray
+    const emojiString = JSON.stringify(emojiArray);
+    axios.post('/comment/update/emoji', { emojiString, id });
+  };
 
- // add the replied comment to the reply data
+  const updateCommentReply = () => {
+    // stingify the emojiArray
+    const replyString = JSON.stringify(replyArray);
+    axios.post('/comment/update/reply', { replyString, id });
+  };
+
+  // add the replied comment to the reply data
   const addCommentToReplyData = (text) => {
     console.log(text, 'in CommentListItem');
     // copy the current replyData
@@ -39,17 +51,18 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
     // replace the replyData
     setReplyArray(newArr);
     // I need to update it in the storage yeah!
+    updateCommentReply();
   };
 
-  const updateEmojiDataOnReplyComment = (emojiArr, id) => {
-      // copy the current replyData
-      const newArr = [...replyArray];
-      // modify the emojiData on the selected comment
-      newArr[id].emojiData = emojiArr;
-      // replace replyData with the modified newArr
-      setReplyArray(newArr);
-  }
-
+  const updateEmojiDataOnReplyComment = (emojiArr, idOfUser) => {
+    // copy the current replyData
+    const newArr = [...replyArray];
+    // modify the emojiData on the selected comment
+    newArr[idOfUser].emojiData = emojiArr;
+    // replace replyData with the modified newArr
+    setReplyArray(newArr);
+    updateCommentReply();
+  };
 
   useEffect(() => {
     getUserProfileById(id_user)
@@ -59,16 +72,6 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
       })
       .catch(err => console.error(err));
   }, []);
-
-  // make a function that will save the current state of the comment into the database
-  const updateComment = () => {
-    // stingify the emojiArray
-    const emojiString = JSON.stringify(emojiArray);
-    axios.post('/comment/update', { emojiString, id });
-  };
-
-
-
 
   const toggleEmoji = () => {
     setSeen(!seen);
@@ -86,7 +89,7 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
     newArr.push({ id: emojiObject.id, skin: emojiObject.skin, count: 1 });
     console.log(newArr);
     setEmojiArray(newArr);
-    updateComment();
+    updateCommentEmoji();
   };
 
   const addToEmojiCount = (index) => {
@@ -95,7 +98,7 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
     // update the count
     newArr[index].count += 1;
     setEmojiArray(newArr);
-    updateComment();
+    updateCommentEmoji();
   };
 
   return (
@@ -111,21 +114,32 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
         </p>
         <div className="mt-4 flex items-center">
           {emojiArray.map((emoji, index) => (
-            <div className="flex mr-2 text-gray-700 text-sm mr-3">
-              <button className="modal-open bg-transparent hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-none" style={{ outline: 'none' }} onClick={() => addToEmojiCount(index)}>
-                <Emoji emoji={{ id: emoji.id, skin: emoji.skin }} size={32} />
-              </button>
-              <div className="flex items-center justify-between" id={key}>
-                <p>{emoji.count}</p>
+            <div key={index}>
+              <div className="flex mr-2 text-gray-700 text-sm mr-3">
+                <button className="modal-open bg-transparent hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-none" style={{ outline: 'none' }} onClick={() => addToEmojiCount(index)}>
+                  <Emoji emoji={{ id: emoji.id, skin: emoji.skin }} size={32} />
+                </button>
+                <div className="flex items-center justify-between" id={key}>
+                  <p>{emoji.count}</p>
+                </div>
               </div>
             </div>
           ))}
           <div className="flex mr-2 text-gray-700 text-sm mr-4">
-            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleEmoji}>+</button>
+            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleEmoji}>
+              <svg fill="none" viewBox="0 0 24 24" className="w-4 h-4 mr-1" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
             {seen ? <Emojis toggleEmoji={toggleEmoji} addToEmojiArray={addToEmojiArray} /> : null}
-            <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleReply}>+</button>
-            {reply ? <CommentReplyList comments={replyArray} toggleReply={toggleReply} addComment={addCommentToReplyData} updateEmojiData={updateEmojiDataOnReplyComment} /> : null}
           </div>
+          <button className="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-1 px-2 rounded-full" style={{ outline: 'none' }} onClick={toggleReply}>
+            <svg fill="none" viewBox="0 0 24 24" className="w-8 h-8 mr-1" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+            </svg>
+            <span>{replyArray.length}</span>
+          </button>
+          {reply ? <CommentReplyList comments={replyArray} toggleReply={toggleReply} addComment={addCommentToReplyData} updateEmojiData={updateEmojiDataOnReplyComment} /> : null}
         </div>
       </div>
     </div>
@@ -133,30 +147,3 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
 };
 
 export default CommentListItem;
-
-
-// [{
-//   id: 1,
-//   commentText: 'This is the first example text I am trying to use for the reply to comments',
-//   username: 'moMoney',
-//   emojiData: '[]',
-//   createdAt: '2020-06-28T15:29:08.000Z',
-//   id_user: 1,
-// },
-// {
-//   id: 2,
-//   commentText: 'This is the second example text I am trying to use for the reply to comments yahhhhhhh',
-//   username: 'moMoney',
-//   emojiData: '[]',
-//   createdAt: '2020-06-28T15:29:08.000Z',
-//   id_user: 1,
-// },
-// {
-//   id: 3,
-//   commentText: 'This is the third example text I am trying to use for the reply to comments woooooohooooooo',
-//   username: 'moMoney',
-//   emojiData: '[]',
-//   createdAt: '2020-06-28T15:29:08.000Z',
-//   id_user: 1,
-// },
-// ]);
