@@ -14,7 +14,7 @@ const Comments = ({ movement, user }) => {
   useEffect(() => {
     axios.get('/comment', { params: { movementId: id } })
       .then((response) => {
-        setComments(response.data);
+        setComments(response.data.reverse());
       })
       .catch((err) => console.error(err));
   }, []);
@@ -31,7 +31,7 @@ const Comments = ({ movement, user }) => {
         // then we will get that data back from the db
         axios.get('/comment', { params: { movementId: id } })
           .then((response) => {
-            setComments(response.data);
+            setComments(response.data.reverse());
           })
           .catch((err) => console.error(err));
       })
