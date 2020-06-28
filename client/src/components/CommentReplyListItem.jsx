@@ -17,7 +17,6 @@ const CommentReplyListItem = ({ comment, key, updateEmojiData }) => {
   useEffect(() => {
     getUserProfileById(id_user)
       .then(res => {
-        console.log(res);
         setUser(res.data);
       })
       .catch(err => console.error(err));
@@ -25,15 +24,12 @@ const CommentReplyListItem = ({ comment, key, updateEmojiData }) => {
 
   const toggleEmoji = () => {
     setSeen(!seen);
-    console.log('hello');
   };
 
   const addToEmojiArray = (emojiObject) => {
-    console.log(emojiObject);
     // make a new array with the added emoji
     const newArr = [...emojiArray];
     newArr.push({ id: emojiObject.id, skin: emojiObject.skin, count: 1 });
-    console.log(newArr);
     setEmojiArray(newArr);
     updateEmojiData(newArr, id);
   };

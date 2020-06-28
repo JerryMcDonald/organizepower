@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CommentList from './CommentList.jsx';
 
-// lead component for comment box 
+// lead component for comment box
 // recives props from Movement.jsx
 const Comments = ({ movement, user }) => {
   const { id } = movement;
