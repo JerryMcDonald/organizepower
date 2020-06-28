@@ -57,7 +57,7 @@ const Comments = ({ movement, user }) => {
       )}
       <div className="commentBox">
         {/* if there are comments render the comment list component and pass down the comments */}
-        {areThereComments && (<CommentList comments={comments} />)}
+        {areThereComments && (<CommentList comments={comments} user={user} />)}
       </div>
     </div>
   );
