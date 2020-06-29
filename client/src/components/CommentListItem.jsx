@@ -20,9 +20,9 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
   const [replyArray, setReplyArray] = useState(JSON.parse(replyData));
 
   // make a function that will save the current state of the comment into the database
-  const updateCommentEmoji = () => {
+  const updateCommentEmoji = (newArr = emojiArray) => {
     // stingify the emojiArray
-    const emojiString = JSON.stringify(emojiArray);
+    const emojiString = JSON.stringify(newArr);
     axios.post('/comment/update/emoji', { emojiString, id });
   };
 
@@ -79,14 +79,6 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
     setReply(!reply);
   };
 
-  const addToEmojiArray = (emojiObject) => {
-    // make a new array with the added emoji
-    const newArr = [...emojiArray];
-    newArr.push({ id: emojiObject.id, skin: emojiObject.skin, count: 1 });
-    setEmojiArray(newArr);
-    updateCommentEmoji();
-  };
-
   const addToEmojiCount = (index) => {
     // copy the current array of objects
     const newArr = [...emojiArray];
@@ -94,6 +86,13 @@ const CommentListItem = ({ comment, key, comments, currentUser }) => {
     newArr[index].count += 1;
     setEmojiArray(newArr);
     updateCommentEmoji();
+  };
+  const addToEmojiArray = (emojiObject) => {
+    // make a new array with the added emoji
+    const newArr = [...emojiArray];
+    newArr.push({ id: emojiObject.id, skin: emojiObject.skin, count: 1 });
+    setEmojiArray(newArr);
+    updateCommentEmoji(newArr);
   };
 
   return (
