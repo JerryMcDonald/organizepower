@@ -67,7 +67,7 @@ const Charity = ({
               {charDescription}
             </p>
             <p className="text-base mt-4">
-              <a className="hover:text-blue-400" href={`//${charUrl}`}>{charUrl}</a>
+              <a className="hover:text-blue-400" href={`${charUrl}`}>{charUrl}</a>
             </p>
           </span>
         </div>
